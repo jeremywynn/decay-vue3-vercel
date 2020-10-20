@@ -1,6 +1,5 @@
 <template>
   <div id="replace" class="replace">
-    <span class="font-bold">Strong like bull!</span>
     <!-- <DecayHeader /> -->
     <main class="dmain" role="main">
       <Suspense>
