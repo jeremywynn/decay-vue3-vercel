@@ -1,11 +1,11 @@
 <template>
   <div id="replace" class="replace">
-    Test From <span class="font-bold">Home</span>!
-    <!-- <DecayHeader />
+    <span class="font-bold">Strong like bull!</span>
+    <!-- <DecayHeader /> -->
     <main class="dmain" role="main">
       <Suspense>
         <template #default>
-          <DecayItems />
+          <Items />
         </template>
         <template #fallback>
           Loading...
@@ -14,12 +14,17 @@
           Failed to load!
         </template>
       </Suspense>
-    </main> -->
+    </main>
   </div>
 </template>
 
 <script>
+import Items from '/src/components/Items.vue'
 export default {
+  name: 'Home',
+  components: {
+    Items
+  },
   setup () {
     
 
