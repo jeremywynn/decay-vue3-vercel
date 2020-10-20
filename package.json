@@ -2,7 +2,7 @@
   "name": "vue-vite-vercel",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port %PORT%",
     "build": "vite build"
   },
   "dependencies": {
