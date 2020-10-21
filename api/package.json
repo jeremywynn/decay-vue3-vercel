@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "formidable": "^2.0.0-canary.20200504.1",
     "mongodb-stitch-server-sdk": "^4.9.0"
   }
 }

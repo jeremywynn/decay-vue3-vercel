@@ -7,7 +7,7 @@
       <div class="ditem__main">
         <div class="ditem-title-area">
           <div class="ditem-title">
-            <div>{{ item.name }} - {{ item._id }}</div>
+            <div>{{ item.name }}</div>
           </div>
           <aside>
             <button class="button--item">...</button>

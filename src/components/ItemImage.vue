@@ -1,12 +1,12 @@
 <template>
   <div class="decay-item-image">
-    <div v-if="item.imageId" class="image-holder">
-      <h1>Truthy!</h1>
-        <input type="file" ref="fileInput" accept="image/*" />
-        <button @click="addImage">Upload</button>
+    <div v-if="item.imageUrl" class="image-holder">
+      <img :src="item.imageUrl" alt="" ref="itemImage" />
     </div>
     <div v-else>
-      <h1>Falsy!</h1>
+      <img src="" alt="" ref="itemImage" />
+      <input type="file" ref="fileInput" accept="image/*" @change="analyzeFile" />
+      <button @click="addImage" :disabled="uploadReady === false">Upload</button>
     </div>
   </div>
 </template>
@@ -26,91 +26,77 @@ export default {
     },
   },
   setup(props) {
-    /*
-    const FileUpload = (img, file) => {
-      const reader = new FileReader();  
-      this.ctrl = createThrobber(img);
-      const xhr = new XMLHttpRequest();
-      this.xhr = xhr;
-      
-      const self = this;
-      this.xhr.upload.addEventListener("progress", function(e) {
-            if (e.lengthComputable) {
-              const percentage = Math.round((e.loaded * 100) / e.total);
-              self.ctrl.update(percentage);
-            }
-          }, false);
-      
-      xhr.upload.addEventListener("load", function(e){
-              self.ctrl.update(100);
-              const canvas = self.ctrl.ctx.canvas;
-              canvas.parentNode.removeChild(canvas);
-          }, false);
-      xhr.open("POST", "http://demos.hacks.mozilla.org/paul/demos/resources/webservices/devnull.php");
-      xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
-      reader.onload = function(evt) {
-        xhr.send(evt.target.result);
-      };
-      reader.readAsBinaryString(file);
-    }
-    */
-    // var cl = new cloudinary.Cloudinary({cloud_name: "decay", secure: true});
-    const addImage = async() => {
+    const addImage = () => {
       // console.log(`adding image for ${props.item._id}!`)
+      const reader = new FileReader()
       const newImage = fileInput.value.files
-      const formData = new FormData()
-      formData.append('image', newImage[0], props.item_id)
-      // formData.append('id', )
-      // console.log(newImage)
-      // Load Image as a blob and convert to dataURL4
-      /*
-      // const reader = new FileReader()
-      reader.addEventListener("load", function () {
-        // convert image file to base64 string
-        console.log(reader.result)
-        // if (reader.result) {
-        //   const response = await fetch('/api/addItemImage', {
-        //     method: 'POST',
-        //     body: formData
-        //   })
-        //   if (!response.ok) {
-        //     throw new Error(`HTTP error! status: ${response.status}`)
-        //   } else {
-        //     console.log(response)
-        //   }
-        // }
+      let fileName
+      let fileType
+      // let file
+      reader.addEventListener('load', async() => {
+        // console.log(reader.result)
+        // console.log(fileName)
+        // console.log(fileType)
+        const response = await fetch('/api/add-item-image', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            file: reader.result,
+            fileName: fileName,
+            fileType: fileType,
+            item: props.item._id
+          })
+        })
+        // Send file to be uploaded to S3
+        // console.log(file)
+        // preview.src = reader.result
+        // console.log(file)
       }, false);
-      if (newImage) {
+      if (newImage[0]) {
         reader.readAsDataURL(newImage[0])
+        fileName = newImage[0].name
+        fileType = newImage[0].type
+        // console.log(fileType)
       }
-      */
-      // console.log(reader.readAsDataURL(newImage[0]))
-
-      // Send File to Azure Function
-      // const response = await fetch('/api/addItemImage', {
-      //   method: 'POST',
-      //   body: formData
-      // })
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! status: ${response.status}`)
-      // } else {
-      //   console.log(response)
-      // }
-      
-      /*
-      const blob = newImage[0]
-      console.log(blob.type)
-      */
+    }
+    const analyzeFile = () => {
+      if (fileInput.value.files[0]) {
+        if (fileInput.value.files[0].size > 4194304) {
+          // Reject
+          // console.log('File is too large!!!')
+          uploadReady.value = false
+        } else {
+          // Make Upload Button Usable
+          // console.log('File meets requirements!')
+          const reader = new FileReader()
+          const newImage = fileInput.value.files
+          reader.addEventListener('load', () => {
+            itemImage.value.src = reader.result
+          }, false);
+          if (newImage[0]) {
+            reader.readAsDataURL(newImage[0])
+          }
+          uploadReady.value = true
+        }
+      } else {
+        console.log('No file was selected.')
+        itemImage.value.src = ''
+        uploadReady.value = false
+      }
     }
     const fileInput = ref(null)
+    const itemImage = ref(null)
+    const uploadReady = ref(false)
     onMounted(() => {
-
+      
     })
-    return { addImage, fileInput }
+    return { addImage, analyzeFile, fileInput, itemImage, uploadReady }
   }
 }
 </script>
 
 <style lang="postcss">
-
+button:disabled {
+  opacity: 0.5;
+}
 </style>
