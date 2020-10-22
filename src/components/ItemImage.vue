@@ -2,6 +2,7 @@
   <div class="decay-item-image">
     <div v-if="item.imageUrl" class="image-holder">
       <img :src="item.imageUrl" alt="" ref="itemImage" />
+      <button @click="deleteImage">Delete Image</button>
     </div>
     <div v-else>
       <img src="" alt="" ref="itemImage" />
@@ -47,10 +48,6 @@ export default {
             item: props.item._id
           })
         })
-        // Send file to be uploaded to S3
-        // console.log(file)
-        // preview.src = reader.result
-        // console.log(file)
       }, false);
       if (newImage[0]) {
         reader.readAsDataURL(newImage[0])
@@ -84,13 +81,23 @@ export default {
         uploadReady.value = false
       }
     }
+    const deleteImage = async() => {
+      console.log(`deleting image of key ${props.item.imageKey}!`)
+      // const response = await fetch('/api/delete-item-image', {
+      //   method: 'POST',
+      //   headers: {'Content-Type': 'application/json'},
+      //   body: JSON.stringify({
+      //     key: props.item.imageKey
+      //   })
+      // })
+    }
     const fileInput = ref(null)
     const itemImage = ref(null)
     const uploadReady = ref(false)
     onMounted(() => {
       
     })
-    return { addImage, analyzeFile, fileInput, itemImage, uploadReady }
+    return { addImage, analyzeFile, deleteImage, fileInput, itemImage, uploadReady }
   }
 }
 </script>
