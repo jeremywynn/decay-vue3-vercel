@@ -83,13 +83,15 @@ export default {
     }
     const deleteImage = async() => {
       console.log(`deleting image of key ${props.item.imageKey}!`)
-      // const response = await fetch('/api/delete-item-image', {
-      //   method: 'POST',
-      //   headers: {'Content-Type': 'application/json'},
-      //   body: JSON.stringify({
-      //     key: props.item.imageKey
-      //   })
-      // })
+      const response = await fetch('/api/delete-item-image', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          key: props.item.imageKey
+        })
+      })
+      console.log(`response from fetch below:`)
+      console.log(response)
     }
     const fileInput = ref(null)
     const itemImage = ref(null)

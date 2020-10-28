@@ -25,6 +25,7 @@ module.exports = async(req, res) => {
         const payload = [base64EncodedImage, userId, id, fileName, fileType]
         await client.auth.loginWithCredential(credential)
         const response = await client.callFunction('addItemImage', payload)
+        console.log(response)
         res.json(response)
       } else {
         // Throw error
