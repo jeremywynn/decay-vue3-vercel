@@ -15,15 +15,15 @@ export default {
   },
   async setup () {
     const error = ref(null)
-    const groups = ref(null)
+    // const groups = ref(null)
     const items = ref(null)
 
     const groupsResponse = await fetch('/api/get-categories')
     const itemsResponse = await fetch('/api/get-items')
-    groups.value = await groupsResponse.json()
+    // groups.value = await groupsResponse.json()
     items.value = await itemsResponse.json()
 
-    return { groups, items, error }
+    return { items, error }
   }
 }
 </script>

@@ -11,16 +11,18 @@
     "build": "vite build"
   },
   "dependencies": {
+    "autoprefixer": "^10.0.4",
     "date-fns": "^2.16.1",
+    "postcss": "^8.1.14",
+    "postcss-nested": "^5.0.2",
+    "postcss-nesting": "^7.0.1",
+    "tailwindcss": "2.0.1",
     "vue": "^3.0.4",
     "vue-flatpickr-component": "^9.0.2",
     "vue-router": "^4.0.1"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.0.4",
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.35",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.1",
     "vite": "^1.0.0-rc.13"
   }
 }

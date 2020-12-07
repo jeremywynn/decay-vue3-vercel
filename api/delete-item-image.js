@@ -12,10 +12,15 @@ module.exports = async(req, res) => {
   try {
     if (req.url === '/api/delete-item-image' && req.method.toLowerCase() === 'delete') {
       const { body } = req
-      if (body.key) {
-        const payload = [key]
+      if (body.key && body.id) {
+        // console.log('if statement works!')
+        // console.log(body.key)
+        const payload = [body.key, body.id]
+        // console.log(payload)
         await client.auth.loginWithCredential(credential)
         const response = await client.callFunction('deleteItemImage', payload)
+        console.log(`response from Mongo:`)
+        console.log(response)
         res.json(response)
       } else {
         // Throw error

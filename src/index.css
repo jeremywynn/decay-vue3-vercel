@@ -2,6 +2,14 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+:root {
+  --blue: rgb(94, 164, 220);
+}
+
 html {
   background-color: #020912;
   box-sizing: border-box;
@@ -21,4 +29,10 @@ html {
   /* text-align: center; */
   /* color: #2c3e50; */
   /* margin-top: 60px; */
+}
+
+.collapsible {
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height .25s ease-in-out;
 }

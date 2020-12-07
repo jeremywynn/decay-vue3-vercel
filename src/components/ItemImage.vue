@@ -1,13 +1,18 @@
 <template>
   <div class="decay-item-image">
     <div v-if="item.imageUrl" class="image-holder">
-      <img :src="item.imageUrl" alt="" ref="itemImage" />
+      <img :src="item.imageUrl" alt="" />
       <button @click="deleteImage">Delete Image</button>
     </div>
     <div v-else>
-      <img src="" alt="" ref="itemImage" />
-      <input type="file" ref="fileInput" accept="image/*" @change="analyzeFile" />
-      <button @click="addImage" :disabled="uploadReady === false">Upload</button>
+      <img v-if="uploadReady === true" src="" alt="" ref="itemImage" />
+      <div class="file-input-region">
+        <label>
+          <span class="file-input-label">Upload</span>
+          <input type="file" ref="fileInput" accept="image/*" class="file-input" capture @change="analyzeFile" />
+        </label>
+      </div>
+      <button v-show="uploadReady === true" @click="addImage" :disabled="uploadReady === false">Upload</button>
     </div>
   </div>
 </template>
@@ -48,6 +53,12 @@ export default {
             item: props.item._id
           })
         })
+        // console.log(`response from fetch:`)
+        // console.log(response)
+        // console.log(response.json())
+        const imageUrl = await response.json()
+        props.item.imageUrl = imageUrl
+        // Do we need to set imageKey too?
       }, false);
       if (newImage[0]) {
         reader.readAsDataURL(newImage[0])
@@ -84,14 +95,18 @@ export default {
     const deleteImage = async() => {
       console.log(`deleting image of key ${props.item.imageKey}!`)
       const response = await fetch('/api/delete-item-image', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
+          id: props.item._id,
           key: props.item.imageKey
         })
       })
-      console.log(`response from fetch below:`)
-      console.log(response)
+      const result = await response.json()
+      if (result.matchedCount) {
+        props.item.imageKey = null
+        props.item.imageUrl = null
+      }
     }
     const fileInput = ref(null)
     const itemImage = ref(null)
@@ -107,5 +122,22 @@ export default {
 <style lang="postcss">
 button:disabled {
   opacity: 0.5;
+}
+.file-input-region {
+  position: relative;
+}
+.file-input {
+  height: 100%;
+  position: absolute;
+  visibility: hidden;
+  width: 100%;
+}
+.file-input-label {
+  border: 1px solid var(--blue);
+  cursor: pointer;
+  display: block;
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+  width: 100%;
 }
 </style>

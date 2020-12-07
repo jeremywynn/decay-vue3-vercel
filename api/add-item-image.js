@@ -18,13 +18,14 @@ module.exports = async(req, res) => {
         const base64EncodedImage = body.file.split(',')[1]
         const fileExtension = body.fileName.split('.').pop()
         const fileName = body.item + '.' + fileExtension
-        console.log(fileName)
+        // console.log(fileName)
         const fileType = body.fileType
         const id = body.item
         const userId = 'jeremy'
         const payload = [base64EncodedImage, userId, id, fileName, fileType]
         await client.auth.loginWithCredential(credential)
         const response = await client.callFunction('addItemImage', payload)
+        console.log(`response from mongo:`)
         console.log(response)
         res.json(response)
       } else {
